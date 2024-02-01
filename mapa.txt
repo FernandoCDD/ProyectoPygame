@@ -1,0 +1,22 @@
+B:2, D:10, T:1, P:1
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+M   M                                 M
+M   M                     P           M
+M   MMMM                              M
+M      M                WWWW          M
+MMMM   M              WWWWWW          M
+M      M                WWWW          M
+M   MMMMMMMMM                         M
+M   M       M                         M
+M   M   M                B            M
+M       M                       C     M
+MMMMMMMMM                B            M
+M                                     M
+M   MMMMMMMMM                         M
+M                                     M
+MMMMM                    DDDDD        M
+M                        DDDDD        M
+M                                     M
+M                                     M
+M                                     M
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
