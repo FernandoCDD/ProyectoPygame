@@ -20,10 +20,10 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
         self.game = game
         self.health = 10
-        self.inventory = False
-        self.oxygen = True
+        self.oxygen = False
         self._layer = PLAYER_LAYER
-        self.waterWeakness = False
+        self.diamonds = 0
+        self.bombs = 0
         self.groups = self.game.all_sprites
         pygame.sprite.Sprite.__init__(self, self.groups)
 
@@ -47,13 +47,19 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         self.movement()
         self.walk_animate()
-        # self.checkWaterCollide()
-        # self.checkPotionCollide()
 
         self.rect.x += self.x_change
         self.check_wall_collide('x')
+        self.check_item_collide('x')
+        self.check_water_collide('x')
+
         self.rect.y += self.y_change
         self.check_wall_collide('y')
+        self.check_item_collide('y')
+        self.check_water_collide('y')
+
+        if self.diamonds == 10:
+            self.win_screen()
 
         self.x_change = 0
         self.y_change = 0
@@ -63,18 +69,22 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_LEFT]:
             self.x_change -= PLAYER_SPEED
             self.facing = 'left'
+            # WALK_SOUND.play()
 
         if keys[pygame.K_RIGHT]:
             self.x_change += PLAYER_SPEED
             self.facing = 'right'
+            # WALK_SOUND.play()
 
         if keys[pygame.K_UP]:
             self.y_change -= PLAYER_SPEED
             self.facing = 'up'
+            # WALK_SOUND.play()
 
         if keys[pygame.K_DOWN]:
             self.y_change += PLAYER_SPEED
             self.facing = 'down'
+            # WALK_SOUND.play()
 
     def check_wall_collide(self, direction):
         if direction == "x":
@@ -85,6 +95,7 @@ class Player(pygame.sprite.Sprite):
                 if self.x_change < 0:
                     self.rect.x = hits[0].rect.right
 
+                HIT_SOUND.play()
                 time.sleep(0.2)
                 self.health -= 1
 
@@ -98,6 +109,77 @@ class Player(pygame.sprite.Sprite):
 
                 time.sleep(0.2)
                 self.health -= 1
+
+        if self.health == 0:
+            self.kill()
+            self.game.playing = False
+
+    def check_item_collide(self, direction):
+        if direction == "x":
+
+            diamond_hits = pygame.sprite.spritecollide(self, self.game.diamond, True)
+            for diamond_hit in diamond_hits:
+                self.diamonds += 1
+                ITEM_COLLECT_SOUND.play()
+
+            bomb_hits = pygame.sprite.spritecollide(self, self.game.bomb, True)
+            for bomb_hit in bomb_hits:
+                self.bombs += 1
+                ITEM_COLLECT_SOUND.play()
+
+            potion_hits = pygame.sprite.spritecollide(self, self.game.potion, True)
+            for potion_hit in potion_hits:
+                self.health += 5
+                POTION_SOUND.play()
+
+            o2_tank_hits = pygame.sprite.spritecollide(self, self.game.o2_tank, True)
+            for o2_tank_hit in o2_tank_hits:
+                self.oxygen = True
+                ITEM_COLLECT_SOUND.play()
+
+        if direction == "y":
+            diamond_hits = pygame.sprite.spritecollide(self, self.game.diamond, True)
+            for diamond_hit in diamond_hits:
+                self.diamonds += 1
+
+            bomb_hits = pygame.sprite.spritecollide(self, self.game.bomb, True)
+            for bomb_hit in bomb_hits:
+                self.bombs += 1
+
+            potion_hits = pygame.sprite.spritecollide(self, self.game.potion, True)
+            for potion_hit in potion_hits:
+                self.health += 5
+
+            o2_tank_hits = pygame.sprite.spritecollide(self, self.game.o2_tank, True)
+            for o2_tank_hit in o2_tank_hits:
+                self.oxygen = True
+
+    def check_water_collide(self, direction):
+        if direction == "x":
+            hits = pygame.sprite.spritecollide(self, self.game.water, False)
+            if hits:
+                if self.x_change > 0:
+                    self.rect.x = hits[0].rect.left - self.rect.width
+                if self.x_change < 0:
+                    self.rect.x = hits[0].rect.right
+
+                if not self.oxygen:
+                    HIT_SOUND.play()
+                    time.sleep(0.2)
+                    self.health -= 3
+
+        if direction == "y":
+            hits = pygame.sprite.spritecollide(self, self.game.water, False)
+            if hits:
+                if self.y_change > 0:
+                    self.rect.y = hits[0].rect.top - self.rect.height
+                if self.y_change < 0:
+                    self.rect.y = hits[0].rect.bottom
+
+                if not self.oxygen:
+                    HIT_SOUND.play()
+                    time.sleep(0.2)
+                    self.health -= 3
 
         if self.health == 0:
             self.kill()
@@ -156,3 +238,9 @@ class Player(pygame.sprite.Sprite):
                 self.animation_loop += 0.1
                 if self.animation_loop >= 3:
                     self.animation_loop = 1
+
+    def win_screen(self):
+        win_text = self.game.font.render(' You Win! ', True, WHITE)
+        win_text_rect = win_text.get_rect(center=(WIN_WIDTH / 2, WIN_HEIGHT / 2))
+        self.game.screen.blit(win_text, win_text_rect)
+        pygame.display.flip()

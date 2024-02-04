@@ -1,9 +1,7 @@
 import pygame
 from config import *
 from models.player import *
-from models.floor import *
-from models.water import *
-from models.wall import *
+from models.tile import *
 from models.button import *
 from models.items import *
 import random
@@ -13,10 +11,12 @@ import sys
 class Game:
     def __init__(self):
         pygame.init()
+        pygame.mixer.init()
         self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.running = True
-        self.font = pygame.font.Font('//fonts/8-bit-hud.ttf', 25)
+        self.font = pygame.font.Font(
+            'C:/Users/ferna/OneDrive/Escritorio/2ºDAM/SGE/ProyectoPygame/fonts/8-bit-hud.ttf', 20)
 
         self.character_spritesheet = SpriteSheet('images/character.png')
         self.character_with_potion_spritesheet = SpriteSheet('images/sprites_personaje_with_potion.png')
@@ -74,6 +74,8 @@ class Game:
                     Water_potion(self, x, y)
                 if key == "D":
                     Diamond(self, x, y)
+                if key == "O":
+                    O2_tank(self, x, y)
 
     def new(self):
         self.playing = True
@@ -83,6 +85,7 @@ class Game:
         self.potion = pygame.sprite.LayeredUpdates()
         self.diamond = pygame.sprite.LayeredUpdates()
         self.bomb = pygame.sprite.LayeredUpdates()
+        self.o2_tank = pygame.sprite.LayeredUpdates()
 
         self.create_map()
         self.load_items()
@@ -96,8 +99,21 @@ class Game:
 
         for sprite in self.all_sprites:
             if isinstance(sprite, Player):
-                health = self.font.render(f'Health: {sprite.health}', True, WHITE)
-                self.screen.blit(health, (35, 30))
+                health_text = f'Health: {sprite.health}'
+                health = self.font.render(health_text, True, WHITE)
+                self.screen.blit(health, (30, 5))
+
+                diamonds_text = f'Diamonds: {sprite.diamonds}'
+                diamonds = self.font.render(diamonds_text, True, WHITE)
+                self.screen.blit(diamonds, (330, 5))
+
+                bomb_text = f'Bombs: {sprite.bombs}'
+                bomb = self.font.render(bomb_text, True, WHITE)
+                self.screen.blit(bomb, (680, 5))
+
+                oxygen_text = f'O2Tank: {sprite.oxygen}'
+                oxygen_tank = self.font.render(oxygen_text, True, WHITE)
+                self.screen.blit(oxygen_tank, (920, 5))
 
         self.clock.tick(FPS)
         pygame.display.update()
@@ -117,8 +133,10 @@ class Game:
         death_text = self.font.render('''You're Dead''', True, WHITE)
         death_text_rect = death_text.get_rect(center=(WIN_WIDTH / 2, WIN_HEIGHT / 2))
 
-        continue_button = Button(10, -60, 150, 50,
-                                 WHITE, BLACK, 'Continue?', 28)
+        continue_button = Button(WIN_WIDTH / 2 - 75, WIN_HEIGHT / 2 + 50, 150, 50,
+                                 WHITE, BLACK, 'Continue?', 20)
+
+        self.all_sprites.empty()
 
         for sprite in self.all_sprites:
             sprite.kill()
