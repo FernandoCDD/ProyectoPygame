@@ -1,22 +1,22 @@
-B:2, D:10, P:1, O:1
+B:2, D:10, P:2, A:1
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-M    M                                M
-M    M                     P          M
-M    MMMM                             M
-M       M                WWWW         M
-MMMM    M              WWWWWW         M
-M       M                WWWW         M
-M    MMMMMMMMM                        M
-M    M       M                        M
-M    M   M                B           M
-M        M                       C    M
-MMMMMMMMM                B            M
-M                                     M
-M   MMMMMMMMM                         M
-M                                     M
-MMMMM            O       DDDDD        M
-M                        DDDDD        M
-M                                     M
-M                                     M
-M                                     M
+MD                                WWWWM
+MXXX    XXXXXXXXXX               XWWWWM
+M       X D       X       P      XW  WM
+M       XXXX   XXX               XWWWWM
+MXXX    X                   XXXXXXXXXXM
+M      DX                             M
+M    XXXXXXXXXXX      XXXXXXXXXXX     M
+M    X         X       X        X     M
+M    X    X    X       X      B X     M
+M      D  X            X           C  M
+MXXXXXXXXXXXXXXXXXXXXXXXXXXX          M
+MD                        XX          M
+MXXX      XXXXXXX        P X          M
+M    X    X     X  D       XXXXXX     M
+M    XXXXXX A   X                     M
+M               X                 WWWWM
+M    XXXXXX     X                 WWWWM
+M      X DX     XX  XXXXX       WWWWWWM
+M      XD X             X      WWW  WWM
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM

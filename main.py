@@ -12,16 +12,19 @@ class Game:
     def __init__(self):
         pygame.init()
         pygame.mixer.init()
+        pygame.mixer.music.set_volume(0.2)
         self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.running = True
         self.font = pygame.font.Font(
-            'C:/Users/claro.defer21_triana/Documents/2ºDAM/SGE/ProyectoPygame/fonts/8-bit-hud.ttf', 20)
+            './fonts/8-bit-hud.ttf', 20)
 
         self.character_spritesheet = SpriteSheet('images/character.png')
+        self.character_with_amulet_spritesheet = SpriteSheet('images/character_with_amulet.png')
         self.floor_spritesheet = SpriteSheet('images/tileset.png')
         self.water_spritesheet = SpriteSheet('images/tileset.png')
         self.wall_spritesheet = SpriteSheet('images/tileset.png')
+        self.breakable_wall_spritesheet = SpriteSheet('images/tileset.png')
         self.potion_spritesheet = SpriteSheet('images/potion.png')
         self.bomb_spritesheet = SpriteSheet('images/bomb.png')
         self.diamond_spritesheet = SpriteSheet('images/diamante.png')
@@ -56,6 +59,8 @@ class Game:
                     Water(self, j, i)
                 if column == "C":
                     Player(self, j, i)
+                if column == "X":
+                    Breakable_wall(self, j, i)
 
     def load_items(self):
         for key, value in self.game_items.items():
@@ -70,21 +75,22 @@ class Game:
                 if key == "B":
                     Bomb(self, x, y)
                 if key == "P":
-                    Water_potion(self, x, y)
+                    WaterPotion(self, x, y)
                 if key == "D":
                     Diamond(self, x, y)
-                if key == "O":
-                    O2_tank(self, x, y)
+                if key == "A":
+                    Amulet(self, x, y)
 
     def new(self):
         self.playing = True
         self.all_sprites = pygame.sprite.LayeredUpdates()
         self.wall = pygame.sprite.LayeredUpdates()
+        self.breakable_wall = pygame.sprite.LayeredUpdates()
         self.water = pygame.sprite.LayeredUpdates()
         self.potion = pygame.sprite.LayeredUpdates()
         self.diamond = pygame.sprite.LayeredUpdates()
         self.bomb = pygame.sprite.LayeredUpdates()
-        self.o2_tank = pygame.sprite.LayeredUpdates()
+        self.amulet = pygame.sprite.LayeredUpdates()
 
         self.create_map()
         self.load_items()
@@ -110,7 +116,7 @@ class Game:
                 bomb = self.font.render(bomb_text, True, WHITE)
                 self.screen.blit(bomb, (680, 5))
 
-                oxygen_text = f'O2Tank: {sprite.oxygen}'
+                oxygen_text = f'Amulet: {"ON" if sprite.amulet else "OFF"}'
                 oxygen_tank = self.font.render(oxygen_text, True, WHITE)
                 self.screen.blit(oxygen_tank, (920, 5))
 
@@ -126,37 +132,37 @@ class Game:
                 self.running = False
 
             if keys[pygame.K_q] or keys[pygame.K_ESCAPE]:
-                pygame.quit()
+                self.show_exit_message()
 
     def death_screen(self):
         death_text = self.font.render('''You're Dead''', True, WHITE)
         death_text_rect = death_text.get_rect(center=(WIN_WIDTH / 2, WIN_HEIGHT / 2))
 
-        continue_button = Button(WIN_WIDTH / 2 - 75, WIN_HEIGHT / 2 + 50, 150, 50,
+        continue_button = Button(WIN_WIDTH / 2 - 75, WIN_HEIGHT / 2 + 50, 250, 80,
                                  WHITE, BLACK, 'Continue?', 20)
 
         self.all_sprites.empty()
 
-        for sprite in self.all_sprites:
-            sprite.kill()
-
         while self.running:
+            pygame.event.pump()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
 
-        mouse_position = pygame.mouse.get_pos()
-        mouse_pressed = pygame.mouse.get_pressed()
+            mouse_position = pygame.mouse.get_pos()
+            mouse_pressed = pygame.mouse.get_pressed()
 
-        if continue_button.isPressed(mouse_position, mouse_pressed):
-            self.new()
-            self.main()
+            if continue_button.isPressed(mouse_position, mouse_pressed):
+                self.new()
+                self.main()
 
-        self.screen.fill(BLACK)
-        self.screen.blit(death_text, death_text_rect)
-        self.screen.blit(continue_button.image, continue_button.imageRect)
-        self.clock.tick(FPS)
-        pygame.display.update()
+            self.screen.fill(BLACK)
+            self.screen.blit(death_text, death_text_rect)
+            self.screen.blit(continue_button.image, continue_button.rect)
+
+            pygame.display.flip()
+            self.clock.tick(FPS)
+            pygame.display.update()
 
     def main(self):
         while self.playing:
@@ -170,7 +176,7 @@ class Game:
         title = self.font.render('Proyecto Pygame', True, BLACK)
         title_rect = title.get_rect(center=(WIN_WIDTH / 2, WIN_HEIGHT / 2))
 
-        play_button = Button(500, 400, 200, 50, WHITE, BLACK, 'Jugar', 28)
+        play_button = Button(520, 400, 200, 50, WHITE, BLACK, 'PLAY', 28)
 
         while intro:
             for event in pygame.event.get():
@@ -186,9 +192,42 @@ class Game:
 
             self.screen.blit(self.intro_background, (0, 0))
             self.screen.blit(title, title_rect)
-            self.screen.blit(play_button.image, play_button.imageRect)
+            self.screen.blit(play_button.image, play_button.rect)
             self.clock.tick(FPS)
             pygame.display.update()
+
+    def show_exit_message(self):
+        self.screen.fill(BLACK)
+
+        font = pygame.font.Font(None, 30)
+        text = font.render("¿Estás seguro?", True, WHITE)  # Texto blanco
+        text_rect = text.get_rect(center=(WIN_WIDTH // 2, WIN_HEIGHT // 2))
+
+        self.screen.blit(text, text_rect)
+
+        yes_text = font.render("Sí (Q)", True, WHITE)
+        yes_rect = yes_text.get_rect(center=(WIN_WIDTH // 2 - 50, WIN_HEIGHT // 2 + 30))
+        self.screen.blit(yes_text, yes_rect)
+
+        no_text = font.render("No (N)", True, WHITE)
+        no_rect = no_text.get_rect(center=(WIN_WIDTH // 2 + 50, WIN_HEIGHT // 2 + 30))
+        self.screen.blit(no_text, no_rect)
+
+        pygame.display.flip()
+
+        waiting_for_confirmation = True
+        while waiting_for_confirmation:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.playing = False
+                    self.running = False
+                    waiting_for_confirmation = False
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_q:
+                        pygame.quit()
+                        waiting_for_confirmation = False
+                    elif event.key == pygame.K_n:
+                        waiting_for_confirmation = False
 
 
 g = Game()

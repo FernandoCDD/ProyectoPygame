@@ -34,6 +34,12 @@ class Wall(Tile):
         super().__init__(game, x, y, WALL_LAYER, (game.all_sprites, game.wall), game.wall_spritesheet, (960, 448))
 
 
+class Breakable_wall(Tile):
+    def __init__(self, game, x, y):
+        super().__init__(game, x, y, WALL_LAYER, (game.all_sprites, game.breakable_wall), game.wall_spritesheet,
+                         (990, 542))
+
+
 class Water(Tile):
     def __init__(self, game, x, y):
         super().__init__(game, x, y, WATER_LAYER, game.all_sprites, game.water_spritesheet, (920, 160))
