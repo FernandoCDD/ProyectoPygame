@@ -13,6 +13,7 @@ class Game:
         pygame.init()
         pygame.mixer.init()
         pygame.mixer.music.set_volume(0.2)
+        GAME_SOUND.play()
         self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.running = True
@@ -200,7 +201,7 @@ class Game:
         self.screen.fill(BLACK)
 
         font = pygame.font.Font(None, 30)
-        text = font.render("¿Estás seguro?", True, WHITE)  # Texto blanco
+        text = font.render("¿Estás seguro?", True, WHITE)
         text_rect = text.get_rect(center=(WIN_WIDTH // 2, WIN_HEIGHT // 2))
 
         self.screen.blit(text, text_rect)

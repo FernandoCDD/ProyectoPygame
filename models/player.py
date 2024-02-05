@@ -4,6 +4,7 @@ import time
 import pygame
 from config import *
 from models import tile
+from models import items
 
 
 class SpriteSheet:
@@ -318,19 +319,26 @@ class Player(pygame.sprite.Sprite):
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_b] and self.bombs >= 1:
-            explosion = TILESIZE * 2
+            explosion_radius = TILESIZE * 2
             self.bombs -= 1
 
             for sprite in self.game.all_sprites:
-                if isinstance(sprite, tile.Breakable_wall):
+                if isinstance(sprite, (tile.Breakable_wall, items.Amulet, items.Bomb)):
                     x_position = sprite.rect.x
                     y_position = sprite.rect.y
                     distance = pygame.math.Vector2(x_position - self.rect.x, y_position - self.rect.y).length()
 
-                    if distance <= explosion:
-                        sprite.kill()
-                        BOMB_SOUND.play()
+                    if distance <= explosion_radius:
 
+                        if isinstance(sprite, tile.Breakable_wall):
+                            sprite.kill()
+                        elif isinstance(sprite, items.Amulet):
+                            sprite.kill()
+
+                        elif isinstance(sprite, items.Bomb):
+                            sprite.kill()
+
+            BOMB_SOUND.play()
             pygame.time.delay(200)
 
     def change_suit(self):

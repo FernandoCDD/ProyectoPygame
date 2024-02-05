@@ -16,7 +16,7 @@ MXXX      XXXXXXX        P X          M
 M    X    X     X  D       XXXXXX     M
 M    XXXXXX A   X                     M
 M               X                 WWWWM
-M    XXXXXX     X                 WWWWM
-M      X DX     XX  XXXXX       WWWWWWM
+M               X                 WWWWM
+M    XXXXXX     XX  XXXXX       WWWWWWM
 M      XD X             X      WWW  WWM
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
