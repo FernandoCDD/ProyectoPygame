@@ -1,6 +1,8 @@
 # Proyecto Pygame Robot 8bit 
 Este repositorio contiene un juego desarrollado en Python con la biblioteca Pygame, llamado "Robot Adventure". En este juego, controlarás a un robot que debe explorar un mapa lleno de obstáculos y desafíos.
 
+
+
 ## Características del Proyecto
 
 *Vida del Jugador*:
@@ -54,6 +56,8 @@ Haz clic en el botón "PLAY" para comenzar el juego.
 *Controles*:
 
 - Utiliza las teclas de dirección para mover al robot.
+- Presiona "B" cerca de los muros negros para lanzar una bomba.
+- presiona "T" para, con el amuleto obtenido, hacerte resistente al agua, y vuelve a pulsar si quieres desactivar el poder.
 - Presiona "Q" o "ESC" para mostrar un mensaje de confirmación de salida.
   
 *Objetivos*:
