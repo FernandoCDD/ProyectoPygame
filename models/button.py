@@ -6,7 +6,7 @@ class Button:
 
     def __init__(self, x, y, width, height, fg, bg, content, fontsize):
         self.font = pygame.font.Font(
-            'C:/Users/ferna/OneDrive/Escritorio/2ºDAM/SGE/ProyectoPygame/fonts/8-bit-hud.ttf', fontsize)
+            'C:/Users/claro.defer21_triana/Documents/2ºDAM/SGE/ProyectoPygame/fonts/8-bit-hud.ttf', fontsize)
         self.content = content
 
         self.x = x

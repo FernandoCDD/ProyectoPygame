@@ -16,10 +16,9 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
         self.font = pygame.font.Font(
-            'C:/Users/ferna/OneDrive/Escritorio/2ºDAM/SGE/ProyectoPygame/fonts/8-bit-hud.ttf', 20)
+            'C:/Users/claro.defer21_triana/Documents/2ºDAM/SGE/ProyectoPygame/fonts/8-bit-hud.ttf', 20)
 
         self.character_spritesheet = SpriteSheet('images/character.png')
-        self.character_with_potion_spritesheet = SpriteSheet('images/sprites_personaje_with_potion.png')
         self.floor_spritesheet = SpriteSheet('images/tileset.png')
         self.water_spritesheet = SpriteSheet('images/tileset.png')
         self.wall_spritesheet = SpriteSheet('images/tileset.png')
@@ -169,9 +168,9 @@ class Game:
         intro = True
 
         title = self.font.render('Proyecto Pygame', True, BLACK)
-        title_rect = title.get_rect(x=10, y=10)
+        title_rect = title.get_rect(center=(WIN_WIDTH / 2, WIN_HEIGHT / 2))
 
-        play_button = Button(10, 50, 200, 50, WHITE, BLACK, 'Jugar', 28)
+        play_button = Button(500, 400, 200, 50, WHITE, BLACK, 'Jugar', 28)
 
         while intro:
             for event in pygame.event.get():

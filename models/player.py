@@ -160,26 +160,32 @@ class Player(pygame.sprite.Sprite):
             if hits:
                 if self.x_change > 0:
                     self.rect.x = hits[0].rect.left - self.rect.width
+                    if not self.oxygen:
+                        HIT_SOUND.play()
+                        time.sleep(0.2)
+                        self.health -= 3
                 if self.x_change < 0:
                     self.rect.x = hits[0].rect.right
-
-                if not self.oxygen:
-                    HIT_SOUND.play()
-                    time.sleep(0.2)
-                    self.health -= 3
+                    if not self.oxygen:
+                        HIT_SOUND.play()
+                        time.sleep(0.2)
+                        self.health -= 3
 
         if direction == "y":
             hits = pygame.sprite.spritecollide(self, self.game.water, False)
             if hits:
                 if self.y_change > 0:
                     self.rect.y = hits[0].rect.top - self.rect.height
+                    if not self.oxygen:
+                        HIT_SOUND.play()
+                        time.sleep(0.2)
+                        self.health -= 3
                 if self.y_change < 0:
                     self.rect.y = hits[0].rect.bottom
-
-                if not self.oxygen:
-                    HIT_SOUND.play()
-                    time.sleep(0.2)
-                    self.health -= 3
+                    if not self.oxygen:
+                        HIT_SOUND.play()
+                        time.sleep(0.2)
+                        self.health -= 3
 
         if self.health == 0:
             self.kill()
