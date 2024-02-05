@@ -47,6 +47,10 @@ Este repositorio contiene un juego desarrollado en Python con la biblioteca Pyga
 
 - Bomb, Potion, Diamond y Amulet, representan los diferentes elementos del juego.
 - Cada item tiene un rol de utilidad para el jugador.
+
+*Clase Tile*:
+
+- Floor, Wall, Breakable_wall y Water son los elementos que forman el mapa.
   
 *Inicio del Juego:*
 
